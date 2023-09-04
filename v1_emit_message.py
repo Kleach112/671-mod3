@@ -1,25 +1,32 @@
 """
     This program sends a message to a queue on the RabbitMQ server.
+    I've updated the code to hold a variable that contains both what is sent in the message as well as what displays to the user.
 
+    Author: Kim Leach
+    Date: 09/03/2023
 """
 
-# add imports at the beginning of the file
+# Add imports at the beginning of the file
 import pika
 
-# create a blocking connection to the RabbitMQ server
-conn = pika.BlockingConnection(pika.ConnectionParameters("LOCALHOST"))
+# Define the message you want to send as a variable
+message = "Refactoring"
 
-# use the connection to create a communication channel
+# Create a blocking connection to the RabbitMQ server
+conn = pika.BlockingConnection(pika.ConnectionParameters("localhost"))  # Use lowercase "localhost" here
+
+# Use the connection to create a communication channel
 ch = conn.channel()
 
-# use the channel to declare a queue
+# Use the channel to declare a queue
 ch.queue_declare(queue="hello")
 
-# use the channel to publish a message to the queue
-ch.basic_publish(exchange="", routing_key="hello", body="Hello World!")
+# Use the channel to publish the message to the queue
+ch.basic_publish(exchange="", routing_key="hello", body=message)
 
-# print a message to the console for the user
-print(" [x] Sent 'Hello World!'")
+# Print the message to the console for the user
+print(f" [x] Sent '{message}'")
 
-# close the connection to the server
+# Close the connection to the server
 conn.close()
+
